@@ -10,7 +10,8 @@
 </head>
 <body>
 
-    @yield('content')
+    {{-- // This is where the content of each page will be injected --}}
+    @yield('content') 
     
     <script src="{{ asset('assets/js/jquery.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.js') }}"></script>
