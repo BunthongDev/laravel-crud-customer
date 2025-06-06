@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomerStoreRequest;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
 
@@ -29,7 +30,17 @@ class CustomerController extends Controller
      */
     public function store(CustomerStoreRequest $request)
     {
-            dd($request->validated());
+        $customer = new Customer();
+        $customer->first_name = $request->first_name;
+        $customer->last_name = $request->last_name;
+        $customer->email = $request->email;
+        $customer->phone = $request->phone;
+        $customer->bank_account_number = $request->bank_account_number;
+        $customer->about = $request->about;
+        $customer->save();
+
+        return redirect()->route('customers.index')->with('success', 'Customer created successfully.');
+
     }
 
     /**
