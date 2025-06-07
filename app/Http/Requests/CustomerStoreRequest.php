@@ -15,7 +15,7 @@ class CustomerStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'image' => ['nullable'],
+            'image' => ['nullable', 'image', 'max:3000'], // Optional image upload, max size 3000KB
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
