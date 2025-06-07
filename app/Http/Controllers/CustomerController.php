@@ -14,7 +14,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return view('customer.index'); // 'customer' is a folder in resources/views and 'index' is a file in that folder
+        $customers = Customer::all(); // Fetch all customers from the database
+        return view('customer.index', compact('customers')); // Pass the customers to the view
     }
 
     /**

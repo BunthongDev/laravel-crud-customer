@@ -3,8 +3,8 @@ use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('customer.index'); //'customer' is a folder in resources/views and 'index' is a file in that folder
-});
+    return view('welcome'); //'customer' is a folder in resources/views and 'index' is a file in that folder
+})->name('home');
 
 
 //example of a route for a login form (not a real login system)
