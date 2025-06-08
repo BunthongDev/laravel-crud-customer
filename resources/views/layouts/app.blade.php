@@ -17,6 +17,7 @@
     <script src="{{ asset('assets/js/jquery.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/fontawesome.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
 </html>

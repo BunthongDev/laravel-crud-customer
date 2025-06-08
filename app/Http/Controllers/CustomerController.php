@@ -53,7 +53,7 @@ class CustomerController extends Controller
         $customer->about = $request->about;
         $customer->save();
 
-        return redirect()->route('customers.index')->with('success', 'Customer created successfully.');
+        return redirect()->route('customers.index')->with('success', 'Customer created successfully.');;
 
     }
 
@@ -111,6 +111,15 @@ class CustomerController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $customer = Customer::findOrFail($id);
+        
+        // Delete the image file if it exists
+        if ($customer->image) {
+            File::delete(public_path($customer->image));
+        }
+        
+        $customer->delete(); // Delete the customer record from the database
+
+        return redirect()->route('customers.index')->with('success', 'Customer deleted successfully.'); // Redirect back to the index page with a success message
     }
 }

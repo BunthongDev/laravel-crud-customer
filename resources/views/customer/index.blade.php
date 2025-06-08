@@ -1,7 +1,41 @@
 {{-- // Extending the main layout --}}
 @extends('layouts.app')
 
+
 @section('content')
+    {{-- Success Message --}}
+    {{-- This will show a success message when a customer is created or updated successfully by using SweetAlert2 --}}
+    @if (session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: @json(session('success')),
+                timer: 3000,
+                showConfirmButton: false
+            });
+        });
+    </script>
+@endif
+
+    <script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This customer will be deleted!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.querySelector('.form-' + id).submit();
+            }
+        })
+    }
+    </script>
     {{-- customer index UI file --}}
     <div class="row justify-content-center mt-5">
         <div class="col-md-8">
@@ -60,12 +94,19 @@
                                     <td>{{ $customer->email }}</td>
                                     <td>{{ $customer->bank_account_number }}</td>
                                     <td>
-                                        <a href="{{ route('customers.edit', $customer->id) }}" style="color: #2c2c2c;" class="ms-1 me-1"><i
-                                                class="far fa-edit"></i></a>
-                                        <a href="{{ route('customers.show', $customer->id) }}" style="color: #2c2c2c;" class="ms-1 me-1"><i
-                                                class="far fa-eye"></i></a>
-                                        <a href="" style="color: #2c2c2c;" class="ms-1 me-1"><i
-                                                class="fas fa-trash-alt"></i></a>
+                                        <a href="{{ route('customers.edit', $customer->id) }}" style="color: #2c2c2c;"
+                                            class="ms-1 me-1"><i class="far fa-edit"></i></a>
+                                        <a href="{{ route('customers.show', $customer->id) }}" style="color: #2c2c2c;"
+                                            class="ms-1 me-1"><i class="far fa-eye"></i></a>
+                                        {{-- using form submission for delete mix with javascript & jquery --}}
+                                        <a href="javascript:;" onclick="confirmDelete({{ $customer->id }})"
+                                            style="color: #2c2c2c;" class="ms-1 me-1"><i class="fas fa-trash-alt"></i></a>
+                                        <form class="form-{{ $customer->id }}"
+                                            action="{{ route('customers.destroy', $customer->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            {{-- <button type="submit" style="border: none; background: none; color: #2c2c2c;" class="ms-1 me-1"><i class="fas fa-trash-alt"></i></button> --}}
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -77,3 +118,5 @@
         </div>
     </div>
 @endsection
+
+
