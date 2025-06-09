@@ -53,21 +53,21 @@
                             <form action="{{ route('customers.index') }}" method="GET">
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" placeholder="Search anything..."
-                                        aria-describedby="button-addon2" name="search" value="{{ request()->search }}">
+                                        aria-describedby="button-addon2" name="search" value"{{ request()->search }}">
                                     <button class="btn btn-outline-secondary" type="submit"
                                         id="button-addon2">Search</button>
                                 </div>
+                                {{-- Sort Dropdown --}}
+                                <div class="input-group mb-3">
+                                    <select class="form-select" name="sort" id="sortSelect" onchange="this.form.submit()">
+                                        <option value="desc" {{ request('sort') == 'desc' ? 'selected' : '' }}>Newest to Old</option>
+                                        <option value="asc" {{ request('sort') == 'asc' ? 'selected' : '' }}>Old to Newest</option>
+                                    </select>
+                                </div>
                             </form>
+                            
                         </div>
-                        <div class="col-md-2">
 
-                            <div class="input-group mb-3">
-                                <select class="form-select" name="" id="">
-                                    <option value="">Newest to Old</option>
-                                    <option value="">Old to Newest</option>
-                                </select>
-                            </div>
-                        </div>
                     </div>
 
                 </div>
