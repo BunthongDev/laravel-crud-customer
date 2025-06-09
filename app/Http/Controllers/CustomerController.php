@@ -15,7 +15,14 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $customers = Customer::all(); // Fetch all customers from the database
+        $search = request()->query('search');
+        $customers = Customer::where('first_name', 'LIKE', "%{$search}%")
+            ->orWhere('last_name', 'LIKE', "%{$search}%")
+            ->orWhere('email', 'LIKE', "%{$search}%")
+            ->orWhere('phone', 'LIKE', "%{$search}%")
+            ->orWhere('bank_account_number', 'LIKE', "%{$search}%")
+            ->get();
+
         return view('customer.index', compact('customers')); // Pass the customers to the view
     }
 
