@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/customer-tab-bar.png') }}">
 
 </head>
 <body>

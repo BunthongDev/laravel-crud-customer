@@ -39,35 +39,29 @@
     {{-- customer index UI file --}}
     <div class="row justify-content-center mt-5">
         <div class="col-md-8">
-            <h3>Customers</h3>
+            <h3>Trash Data</h3>
             <div class="card">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-2">
-                            <a href="{{ route('customers.create') }}" class="btn"
-                                style="background-color: #4643d3; color: white;"><i class="fas fa-plus"></i> Create
-                                Customer</a>
+                            <a href="{{ route('customers.index') }}" class="btn"
+                                style="background-color: #4643d3; color: white;"><i class="fas fa-arrow-left"></i>
+                                Back</a>
                         </div>
                         {{-- search form input --}}
                         <div class="col-md-8">
-                            <form action="{{ route('customers.index') }}" method="GET">
+                            <form action="{{ route('customers.trash') }}" method="GET">
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" placeholder="Search anything..."
                                         aria-describedby="button-addon2" name="search" value"{{ request()->search }}">
                                     <button class="btn btn-outline-secondary" type="submit"
                                         id="button-addon2">Search</button>
                                 </div>
-                                {{-- Sort Dropdown --}}
-                                <div class="input-group mb-3">
-                                    <select class="form-select" name="sort" id="sortSelect" onchange="this.form.submit()">
-                                        <option value="desc" {{ request('sort') == 'desc' ? 'selected' : '' }}>Newest to Old</option>
-                                        <option value="asc" {{ request('sort') == 'asc' ? 'selected' : '' }}>Old to Newest</option>
-                                    </select>
-                                </div>
+                                
                             </form>
                             
                             <div class="col-md-2">
-                                <a href="{{ route('customers.trash') }}" class="btn"
+                                <a href="" class="btn"
                                 style="background-color: #121217; color: white;"><i class="fas fa-trash-alt"></i> Trash</a>
                             </div>
                             
@@ -100,19 +94,30 @@
                                     <td>{{ $customer->email }}</td>
                                     <td>{{ $customer->bank_account_number }}</td>
                                     <td>
-                                        <a href="{{ route('customers.edit', $customer->id) }}" style="color: #2c2c2c;"
-                                            class="ms-1 me-1"><i class="far fa-edit"></i></a>
+                                        
                                         <a href="{{ route('customers.show', $customer->id) }}" style="color: #2c2c2c;"
                                             class="ms-1 me-1"><i class="far fa-eye"></i></a>
-                                        {{-- using form submission for delete mix with javascript & jquery --}}
-                                        <a href="javascript:;" onclick="confirmDelete({{ $customer->id }})"
-                                            style="color: #2c2c2c;" class="ms-1 me-1"><i class="fas fa-trash-alt"></i></a>
-                                        <form class="form-{{ $customer->id }}"
-                                            action="{{ route('customers.destroy', $customer->id) }}" method="POST">
+                                        
+                                          {{-- delete customer permanently --}}
+                                        <form action="{{ route('customers.forceDelete', $customer->id) }}" method="POST"
+                                            class="form-{{ $customer->id }}" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            {{-- <button type="submit" style="border: none; background: none; color: #2c2c2c;" class="ms-1 me-1"><i class="fas fa-trash-alt"></i></button> --}}
-                                        </form>
+                                            <a href="javascript:;" onclick="confirmDelete({{ $customer->id }})"
+                                                style="color: #2c2c2c;" class="ms-1 me-1"><i class="far fa-trash-alt"></i></a>
+                                            
+                                        </form>   
+                                            
+                                        {{-- using form submission for restore mix with javascript & jquery --}}
+                                        <a href="javascript:;" onclick="confirmDelete({{ $customer->id }})"
+                                            style="color: #2c2c2c;" class="ms-1 me-1"></a>
+                                            <form action="{{ route('customers.restore', $customer->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="btn btn-success btn-sm">
+                                                    <i class="fas fa-undo"></i> Restore
+                                                </button>
+                                            </form>
                                     </td>
                                 </tr>
                             @endforeach

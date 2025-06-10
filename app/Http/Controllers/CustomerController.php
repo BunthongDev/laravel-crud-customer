@@ -75,9 +75,9 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show( $id)
     {
-        $customer = Customer::findOrFail(($id));
+        $customer = Customer::withTrashed()-> findOrFail(($id));
         return view('customer.show', compact('customer')); // Pass the customer to the show view
     }
 
@@ -127,14 +127,54 @@ class CustomerController extends Controller
     public function destroy(string $id)
     {
         $customer = Customer::findOrFail($id);
-        
-        // Delete the image file if it exists
-        if ($customer->image) {
-            File::delete(public_path($customer->image));
-        }
-        
+
+        // Do NOT delete the image file here for soft delete
         $customer->delete(); // Delete the customer record from the database
 
         return redirect()->route('customers.index')->with('success', 'Customer deleted successfully.'); // Redirect back to the index page with a success message
     }
+    
+    function trashIndex(Request $request){
+        // Retrieve all customers from the database
+        $search = request()->query('search');
+        $sort = request()->query('sort', 'desc'); // Default to 'desc'
+
+        $customers = Customer::onlyTrashed()
+            ->when($search, function ($query, $search) {
+                $query->where('first_name', 'LIKE', "%{$search}%")
+                    ->orWhere('last_name', 'LIKE', "%{$search}%")
+                    ->orWhere('email', 'LIKE', "%{$search}%")
+                    ->orWhere('phone', 'LIKE', "%{$search}%")
+                    ->orWhere('bank_account_number', 'LIKE', "%{$search}%");
+            })
+            ->orderBy('created_at', $sort)
+            ->get();
+    
+
+        return view('customer.trash', compact('customers')); // Return the view with the customers data
+    }
+
+    public function restore($id)
+    {
+        $customer = Customer::onlyTrashed()->findOrFail($id);
+        $customer->restore();
+
+        return redirect()->route('customers.trash')->with('success', 'Customer restored successfully.');
+    }
+
+
+    public function forceDelete($id)
+    {
+        $customer = Customer::onlyTrashed()->findOrFail($id);
+
+        // Now delete the image file
+        if ($customer->image) {
+            File::delete(public_path($customer->image));
+        }
+
+        $customer->forceDelete();
+
+        return redirect()->route('customers.trash')->with('success', 'Customer permanently deleted.');
+    }
+    
 }

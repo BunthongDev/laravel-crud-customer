@@ -12,6 +12,15 @@ Route::get('/login', function () {
     return view('customer.login-form'); // 'customer' is a folder in resources/views and 'login-form' is a file in that folder
 });
 
+// Route for trashing customers
+Route::get('customers/trash', [CustomerController::class, 'trashIndex'])->name('customers.trash');
+
+// Route for restoring a trashed customer
+Route::patch('/customers/{id}/restore', [CustomerController::class, 'restore'])->name('customers.restore');
+
+// Route for permanently deleting a trashed customer
+Route::delete('/customers/{id}/force-delete', [CustomerController::class, 'forceDelete'])->name('customers.forceDelete');
+
 // Resource route for CustomerController
 Route::resource('customers', CustomerController::class);
 

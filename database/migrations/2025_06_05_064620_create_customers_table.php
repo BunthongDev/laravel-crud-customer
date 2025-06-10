@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('bank_account_number');
             $table->text('about')->nullable();
             $table->timestamps();
+
         });
     }
 
